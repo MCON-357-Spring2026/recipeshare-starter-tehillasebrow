@@ -286,7 +286,7 @@
         PostgreSQL is an open-source relational database system that supports the same foundational ideas you used in SQL Server:
         tables, keys, joins, constraints, queries, indexes, and transactions. For a Flask application, it is a strong choice because
         it is stable, widely supported, and works well with Python tools such as SQLAlchemy and Flask-Migrate. It is also common in
-        deployed applications, so it gives students experience with a production-style database instead of only a lightweight classroom database.
+        deployed applications, so it gives you experience with a production-style database instead of only a lightweight classroom database.
       </p>
 
       <div class="compare">
@@ -325,7 +325,150 @@
         <p>A column defines one attribute of that record, such as title, email, or prep time.</p>
       </div>
     </section>
+    <section class="section panel">
+      <h2>Working with pgAdmin on Windows</h2>
+      <p>
+        On your Windows VMs you can use <strong>pgAdmin</strong> as a graphical tool for working with PostgreSQL.
+        pgAdmin lets you browse databases, inspect tables, view columns, run SQL, and verify that your schema matches what
+        your Flask application expects. This is especially helpful early on, because you can see the database visually
+        while you are also learning models and migrations in Python.
+      </p>
 
+      <div class="grid-2">
+        <div>
+          <h3>Typical connection values</h3>
+          <ul>
+            <li><strong>Host:</strong> <code>localhost</code></li>
+            <li><strong>Port:</strong> <code>5432</code></li>
+            <li><strong>Maintenance database:</strong> <code>postgres</code> or <code>recipeshare</code></li>
+            <li><strong>Username:</strong> your PostgreSQL username or <code>postgres</code></li>
+            <li><strong>Password:</strong> your PostgreSQL password or <code>postgres</code></li>
+          </ul>
+        </div>
+        <div>
+          <h3>What you should do in pgAdmin</h3>
+          <ul>
+            <li>connect to the local PostgreSQL server</li>
+            <li>expand <code>Databases</code> and open <code>recipeshare</code></li>
+            <li>inspect the <code>users</code> and <code>recipes</code> tables</li>
+            <li>right-click a table to view data or properties</li>
+            <li>open the Query Tool and run SQL manually</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>Open pgAdmin</h3>
+          <p>Launch pgAdmin from the Windows Start menu and connect to your local PostgreSQL server.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>Locate your database</h3>
+          <p>Expand <code>Servers → PostgreSQL → Databases</code> and select <code>recipeshare</code>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>Inspect tables</h3>
+          <p>Expand <code>Schemas → public → Tables</code> to see the tables created by your migration.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div>
+          <h3>Run SQL</h3>
+          <p>Use the Query Tool to experiment with SQL such as selecting recipes or joining recipes to users.</p>
+          <pre><code>SELECT r.title, u.username
+FROM recipes r
+JOIN users u ON r.user_id = u.id;</code></pre>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Teaching value:</strong> pgAdmin gives you an easy visual bridge from SQL concepts you already know to the live PostgreSQL database that supports their Flask application.
+      </div>
+    </section>
+
+    <section class="section panel">
+      <h2>Working from psql on Windows VMs</h2>
+      <p>
+        You should also learn how to work from the command line using <strong>psql</strong>, the PostgreSQL interactive terminal.
+        This is useful when a GUI is unavailable, when you want to follow written instructions exactly, or when you need a quick way
+        to test SQL commands. On the Windows VMs, you may need to add the PostgreSQL runtime folder to the command prompt
+        <code>PATH</code> before <code>psql</code> can be launched directly.
+      </p>
+
+      <h3>Temporary PATH update in Command Prompt</h3>
+      <p>In a regular Windows Command Prompt, you can run:</p>
+      <pre><code>set PATH=%PATH%;C:\Program Files\PostgreSQL\17\pgAdmin 4\runtime</code></pre>
+
+      <p>After that, you can try:</p>
+      <pre><code>psql -U postgres
+psql -U postgres -d recipeshare</code></pre>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>Open Command Prompt</h3>
+          <p>Start a normal Windows Command Prompt on the VM.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>Update PATH</h3>
+          <p>Add the PostgreSQL runtime folder so the shell can find the <code>psql</code> executable.</p>
+          <pre><code>set PATH=%PATH%;C:\Program Files\PostgreSQL\17\pgAdmin 4\runtime</code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>Connect to PostgreSQL</h3>
+          <p>Log in with a PostgreSQL username and optionally specify the database name.</p>
+          <pre><code>psql -U postgres -d recipeshare</code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div>
+          <h3>Use basic psql commands</h3>
+          <pre><code>\l
+\c recipeshare
+\dt
+\d users
+\d recipes</code></pre>
+          <p class="mini">
+            These commands list databases, connect to a database, list tables, and describe table structures.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">5</div>
+        <div>
+          <h3>Run SQL directly</h3>
+          <pre><code>SELECT * FROM users;
+SELECT * FROM recipes;</code></pre>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Important note:</strong> the <code>set PATH=...</code> command above updates the path only for the current Command Prompt window.
+        If you close that window, you may need to run the command again in a new session.
+      </div>
+    </section>
     <section class="section panel">
       <h2>Basic Database Operations</h2>
       <p>
